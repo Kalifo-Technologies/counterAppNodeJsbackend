@@ -1,42 +1,45 @@
 import asyncHandler from "express-async-handler";
-import Goal from "../model/Goal.js";
 import Dhikr from "../model/Dhikr.js";
 import Cart from "../model/Cart.js";
+import GoalSet from "../model/Goal.js";
+import mongoose from "mongoose";
+
 export const addNewGoal = asyncHandler(async (req, res) => {
   try {
     const { selectDhikr, setAmount, note } = req.body;
     const userId = req.userId;
-    if (!selectDhikr || !setAmount || !note || !userId) {
+    if (!selectDhikr || !note || !setAmount) {
       return res.status(400).json({
         status: "error",
         message:
-          "Please provide all required fields: selectDhikr, setAmount, note, userId",
+          "Please provide all required fields: selectDhikr, setAmount,note,userId",
         code: "MISSING_FIELDS",
       });
     }
+    const existingDhikr = await GoalSet.findOne({ note, userId });
 
-    const existingGoal = await Goal.findOne({ note });
-    if (existingGoal) {
+    if (existingDhikr) {
       return res.status(409).json({
         status: "error",
         message: "The provided note already exists",
-        code: "DUPLICATE_GOAL",
+        code: "DUPLICATE_DHIKR",
       });
     }
-    const goal = await Goal.create({
+    const goal = await GoalSet.create({
       selectDhikr,
       setAmount,
       note,
       userId,
     });
-    // const goalsCount = await Goal.countDocuments();
     res.status(201).json({
       status: "success",
-      message: "Goal created successfully",
+      message: "goal created successfully",
       goal: {
-        selectDhikr: goal.selectDhikr,
-        setAmount: goal.setAmount,
+        goal: goal.selectDhikr,
         note: goal.note,
+        setAmount: goal.setAmount,
+
+        // note: dhikr.userId,
       },
     });
   } catch (error) {
@@ -46,13 +49,12 @@ export const addNewGoal = asyncHandler(async (req, res) => {
 });
 export const addNewDhikr = asyncHandler(async (req, res) => {
   try {
-    const {  title, notes } = req.body;
+    const { title, notes } = req.body;
     const userId = req.userId;
-    if (!title|| !notes || !userId) {
+    if (!title || !notes || !userId) {
       return res.status(400).json({
         status: "error",
-        message:
-          "Please provide all required fields: title, notes, userId",
+        message: "Please provide all required fields: title, notes, userId",
         code: "MISSING_FIELDS",
       });
     }
@@ -140,7 +142,7 @@ export const increment = asyncHandler(async (req, res) => {
 
 export const removeAllCounter = asyncHandler(async (req, res) => {
   try {
-    const userId = req.userId; 
+    const userId = req.userId;
     await Cart.deleteMany({ userId });
 
     res.status(200).json({

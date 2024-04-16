@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const GoalSchema = new Schema(
+const SetGoalSchema = new Schema(
   {
     selectDhikr: {
       type: String,
@@ -16,17 +16,13 @@ const GoalSchema = new Schema(
       required: true,
     },
     userId: {
-      type: String,
+     type:String,
       required: true,
-      unique: true,
-    },
-    quantity: {
-      type: Number,
     },
   },
   { timestamps: true }
 );
 
-const Goal = mongoose.model("Goal", GoalSchema);
+const GoalSet = mongoose.model("GoalSet", SetGoalSchema);
 
-export default Goal;
+export default GoalSet;
