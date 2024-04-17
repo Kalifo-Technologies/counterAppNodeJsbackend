@@ -52,9 +52,13 @@ export const getAllGoals = asyncHandler(async (req, res) => {
     const userId = req.userId;
 
     const goals = await GoalSet.find({ userId });
+    console.log('====================================');
+    console.log(goals);
+    console.log('====================================');
     const formattedGoals = goals.map(goal => ({
       selectDhikr: goal.selectDhikr,
       note: goal.note,
+      setAmount:goal.setAmount
     }));
 
     res.status(201).json({
