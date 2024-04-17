@@ -90,3 +90,30 @@
 //   "message": "All items removed from the cart"
 // }
 // http://localhost:2030/api/v1/increment/remove-all/
+
+
+
+
+// ==============================================================
+// get goals method :get
+// "http://localhost:2030/api/v1/addGoal"
+
+
+// {
+//     "userId":"133"
+//   }
+
+// {
+//     "status": "success",
+//     "message": "Goals retrieved successfully",
+//     "goals": [
+//       {
+//         "selectDhikr": "xyzzsaz",
+//         "note": "xyzsdadzz"
+//       },
+//       {
+//         "selectDhikr": "xysdazzsaz",
+//         "note": "xyzsdsaadzz"
+//       }
+//     ]
+//   }

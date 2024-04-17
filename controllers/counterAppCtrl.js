@@ -47,6 +47,27 @@ export const addNewGoal = asyncHandler(async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+export const getAllGoals = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    const goals = await GoalSet.find({ userId });
+    const formattedGoals = goals.map(goal => ({
+      selectDhikr: goal.selectDhikr,
+      note: goal.note,
+    }));
+
+    res.status(201).json({
+      status: "success",
+      message: "Goals retrieved successfully",
+      goals: formattedGoals,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 export const addNewDhikr = asyncHandler(async (req, res) => {
   try {
     const { title, notes } = req.body;
@@ -92,6 +113,7 @@ export const getAllCounts = asyncHandler(async (req, res) => {
     const userId = req.userId;
 
     const cart = await Cart.find({ userId: userId });
+    
 
     if (!cart || cart.length === 0) {
       return res.status(404).json({
